@@ -14,15 +14,10 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class User {
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userID;
-    private String avatar;
-    @NotBlank(message = "fullName of user must other blank")
-    private String name;
-    private byte age;
-    private String email;
-    private String phoneNumber;
-    private String address;
+    private byte roleID;
+    @NotBlank(message = "roleName must other blank")
+    private String roleName;
 }
