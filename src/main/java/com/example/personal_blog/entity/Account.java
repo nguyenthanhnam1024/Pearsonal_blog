@@ -21,7 +21,7 @@ public class Account {
     private long accountID;
 
     @NotBlank(message = "userName must other blank")
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 50, message = "userName from 2 to 50 keyword")
     private String userName;
 
     @NotBlank(message = "password must other blank")
