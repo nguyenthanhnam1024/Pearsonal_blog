@@ -1,6 +1,6 @@
 package com.example.personal_blog.jwt;
 
-import com.example.personal_blog.ServiceImp.UserDetailsServiceImp;
+import com.example.personal_blog.service_imp.UserDetailsServiceImp;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

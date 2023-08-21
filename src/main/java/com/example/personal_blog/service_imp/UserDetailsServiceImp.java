@@ -1,4 +1,4 @@
-package com.example.personal_blog.ServiceImp;
+package com.example.personal_blog.service_imp;
 
 import com.example.personal_blog.config.UserDetailsImp;
 import com.example.personal_blog.entity.Account;
@@ -38,7 +38,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
         Role role = roleRepo.findById(roleUser.getRoleID())
                 .orElseThrow(() -> new UsernameNotFoundException("Role not found for user: " + user.getName()));
 
-        if (role.getRoleName().equals("ADMIN") && user.getUserID() != 0) {
+        if (role.getRoleName().equals("ADMIN") && user.getUserID() != 1) {
             throw new UsernameNotFoundException("authenticate error");
         }
         return userDetailsImp.build(account.getUserName(), account.getPassword(), role.getRoleName());

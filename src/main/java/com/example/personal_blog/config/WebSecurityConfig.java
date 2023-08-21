@@ -1,6 +1,6 @@
 package com.example.personal_blog.config;
 
-import com.example.personal_blog.ServiceImp.UserDetailsServiceImp;
+import com.example.personal_blog.service_imp.UserDetailsServiceImp;
 import com.example.personal_blog.exception.AuthExceptionEntryPoint;
 import com.example.personal_blog.jwt.AuthFilter;
 import lombok.AllArgsConstructor;
@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(authExceptionEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers("/security/login", "/security/register", "/security/logout", "/shop/getShopList").permitAll()
+                .antMatchers("/security/login", "/user/register", "/security/logout").permitAll()
                 .anyRequest().authenticated();
         http.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class);
     }

@@ -12,14 +12,14 @@ import java.util.Date;
 
 @Component
 public class JwtUtils {
-    @Value("ntn")
+    @Value("${jwt.secret}")
     private String JWT_SECRET;
 
     public String generateJwt(UserDetailsImp userDetailsImp) {
         return Jwts.builder()
                 .setSubject(userDetailsImp.getUsername())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + 36000L))
+                .setExpiration(new Date(new Date().getTime() + 36000000L))
                 .signWith(SignatureAlgorithm.HS512, JWT_SECRET)
                 .compact();
     }

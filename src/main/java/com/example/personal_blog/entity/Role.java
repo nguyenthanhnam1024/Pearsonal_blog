@@ -17,7 +17,7 @@ import javax.validation.constraints.NotBlank;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private byte roleID;
+    private int roleID;
     @NotBlank(message = "roleName must other blank")
     private String roleName;
 }

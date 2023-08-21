@@ -49,12 +49,12 @@ public class PersonalBlogApplication {
 		String encodedPassword = bc.encode("admin");
 		Account account = new Account(1L, "admin", encodedPassword);
 		accountRepo.save(account);
-		User user = new User(1L, null, "admin", (byte) 20, "admin@gmail.com", "0123456789", "vietnam", 1L);
+		User user = new User(1L, null, "admin",20, "admin@gmail.com", "0123456789", "vietnam", 1L);
 		userRepo.save(user);
-		Role role = new Role((byte) 1, "ADMIN");
+		Role role = new Role(1, "ADMIN");
 		roleRepo.save(role);
-		roleRepo.save(new Role((byte) 2, "STAFF"));
-		RoleUserID roleUserID = new RoleUserID((byte) 1, 1);
+		roleRepo.save(new Role(2, "STAFF"));
+		RoleUserID roleUserID = new RoleUserID(1, 1);
 		RoleUser roleUser = new RoleUser();
 		roleUser.setRoleID(roleUserID.getRoleID());
 		roleUser.setUserID(user.getUserID());

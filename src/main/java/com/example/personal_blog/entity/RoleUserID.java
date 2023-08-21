@@ -10,6 +10,6 @@ import java.io.Serializable;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class RoleUserID implements Serializable {
-    private byte roleID;
+    private int roleID;
     private long userID;
 }

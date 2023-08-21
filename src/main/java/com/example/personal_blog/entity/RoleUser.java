@@ -17,5 +17,5 @@ public class RoleUser {
     @Id
     private long userID;
     @Id
-    private byte roleID;
+    private int roleID;
 }

@@ -25,7 +25,7 @@ public class User {
     @NotBlank(message = "fullName of user must other blank")
     private String name;
     @Min(value = 7, message = "encourage 7+")
-    private byte age;
+    private int age;
     @Email(message = "email invalid")
     private String email;
     @Size(min = 10,max = 10, message = "phone number invalid")
