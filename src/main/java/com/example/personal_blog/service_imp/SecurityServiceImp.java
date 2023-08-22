@@ -39,11 +39,10 @@ public class SecurityServiceImp implements SecurityService {
     private final RoleRepo roleRepo;
 
     @Override
-    public void login(HttpServletResponse response, BindingResult bindingResult, Account account) throws MyValidateException {
+    public ResponseEntity<Object> login(HttpServletResponse response, BindingResult bindingResult, Account account) throws MyValidateException {
         Map<String, String> mapError = commons.handlesBindingResult(bindingResult);
         if (!mapError.isEmpty()) {
-            ResponseEntity.status(400).body(mapError);
-            return;
+            return ResponseEntity.badRequest().body(mapError);
         }
 
 
@@ -69,6 +68,6 @@ public class SecurityServiceImp implements SecurityService {
         } catch (Exception ex) {
             throw new MyValidateException("error validation");
         }
-        ResponseEntity.ok(responseLogin);
+        return ResponseEntity.ok(responseLogin);
     }
 }
