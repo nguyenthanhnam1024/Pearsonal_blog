@@ -6,7 +6,7 @@ import lombok.Data;
 public class ResponseLogin {
     private String avatar;
     private String name;
-    private byte age;
+    private int age;
     private String email;
     private String phoneNumber;
     private String address;
