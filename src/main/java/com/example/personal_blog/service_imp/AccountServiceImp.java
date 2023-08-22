@@ -1,9 +1,11 @@
 package com.example.personal_blog.service_imp;
 
 import com.example.personal_blog.entity.Account;
+import com.example.personal_blog.entity.RoleUser;
 import com.example.personal_blog.entity.User;
 import com.example.personal_blog.exception.MyValidateException;
 import com.example.personal_blog.repository.AccountRepo;
+import com.example.personal_blog.repository.RoleUserRepo;
 import com.example.personal_blog.repository.UserRepo;
 import com.example.personal_blog.request.RequestUpdateAccount;
 import com.example.personal_blog.service.AccountService;
@@ -13,6 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import javax.transaction.Transactional;
 import java.util.Map;
 import java.util.Optional;
 
@@ -22,8 +25,10 @@ public class AccountServiceImp implements AccountService {
     private final AccountRepo accountRepo;
     private final UserRepo userRepo;
     private final Commons commons;
+    private final RoleUserRepo roleUserRepo;
 
     @Override
+    @Transactional
     public ResponseEntity<Object> createAccount(Account account, BindingResult bindingResult) throws MyValidateException {
         Map<String, String> mapError = commons.handlesBindingResult(bindingResult);
         Optional<Account> newAccount = accountRepo.findByUserName(account.getUserName());
@@ -38,7 +43,9 @@ public class AccountServiceImp implements AccountService {
                 BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
                 String passwordEncode = bc.encode(account.getPassword());
                 account.setPassword(passwordEncode);
-                accountRepo.save(account);
+                Account accountStored = accountRepo.save(account);
+                User user = userRepo.save(new User(0, null, "user", 20, "user@gmail.com","0123456789", "user address", accountStored.getAccountID()));
+                roleUserRepo.save(new RoleUser(user.getUserID(), 1));
                 return ResponseEntity.ok("Create Account success");
             } catch (Exception ex) {
                 throw new MyValidateException(ex.getMessage());
