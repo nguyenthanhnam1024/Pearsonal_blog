@@ -4,6 +4,7 @@ import com.example.personal_blog.entity.Account;
 import com.example.personal_blog.entity.RoleUser;
 import com.example.personal_blog.entity.User;
 import com.example.personal_blog.exception.MyValidateException;
+import com.example.personal_blog.jwt.ExtractDataFromJwt;
 import com.example.personal_blog.repository.AccountRepo;
 import com.example.personal_blog.repository.RoleUserRepo;
 import com.example.personal_blog.repository.UserRepo;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.Map;
 import java.util.Optional;
@@ -26,6 +28,7 @@ public class AccountServiceImp implements AccountService {
     private final UserRepo userRepo;
     private final Commons commons;
     private final RoleUserRepo roleUserRepo;
+    private final ExtractDataFromJwt extractDataFromJwt;
 
     @Override
     @Transactional
@@ -45,7 +48,7 @@ public class AccountServiceImp implements AccountService {
                 account.setPassword(passwordEncode);
                 Account accountStored = accountRepo.save(account);
                 User user = userRepo.save(new User(0, null, "user", 20, "user@gmail.com","0123456789", "user address", accountStored.getAccountID()));
-                roleUserRepo.save(new RoleUser(user.getUserID(), 1));
+                roleUserRepo.save(new RoleUser(user.getUserID(), 2));
                 return ResponseEntity.ok("Create Account success");
             } catch (Exception ex) {
                 throw new MyValidateException(ex.getMessage());
@@ -87,5 +90,28 @@ public class AccountServiceImp implements AccountService {
             }
         }
         throw new MyValidateException("account update failed");
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<Object> deleteAccount(HttpServletRequest request, String password) throws MyValidateException {
+        Optional<Account> accountOptional = accountRepo.findByUserName(extractDataFromJwt.extractUserName(request));
+        if (accountOptional.isPresent()) {
+            BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
+            if (bc.matches(password, accountOptional.get().getPassword())) {
+                Optional<User> userOptional = userRepo.findByAccountID(accountOptional.get().getAccountID());
+                if (userOptional.isPresent()) {
+                    try {
+                        roleUserRepo.deleteRoleUserByUserID(userOptional.get().getUserID());
+                        userRepo.delete(userOptional.get());
+                        accountRepo.delete(accountOptional.get());
+                        return ResponseEntity.ok("account delete success");
+                    } catch (Exception ex) {
+                        throw new MyValidateException("error query");
+                    }
+                }
+            }
+        }
+        return ResponseEntity.badRequest().body("account delete failed");
     }
 }

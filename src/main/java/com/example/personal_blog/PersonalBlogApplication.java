@@ -53,7 +53,7 @@ public class PersonalBlogApplication {
 		userRepo.save(user);
 		Role role = new Role(1, "ADMIN");
 		roleRepo.save(role);
-		roleRepo.save(new Role(2, "STAFF"));
+		roleRepo.save(new Role(2, "USER"));
 		RoleUserID roleUserID = new RoleUserID(1, 1);
 		RoleUser roleUser = new RoleUser();
 		roleUser.setRoleID(roleUserID.getRoleID());

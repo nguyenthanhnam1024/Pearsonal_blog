@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -25,5 +26,10 @@ public class AccountController {
     @PutMapping("/update")
     public ResponseEntity<Object> updateAccount(@RequestBody @Valid RequestUpdateAccount requestUpdateAccount, BindingResult bindingResult) throws MyValidateException {
         return accountService.updatePassword(requestUpdateAccount, bindingResult);
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Object> deleteAccount(HttpServletRequest request, @RequestBody Account account) throws MyValidateException {
+        return accountService.deleteAccount(request, account.getPassword());
     }
 }
