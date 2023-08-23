@@ -1,5 +1,6 @@
 package com.example.personal_blog.config;
 
+import com.example.personal_blog.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.Collection;
 public class UserDetailsImp implements UserDetails {
     private String userName;
     private String password;
+    private User user;
     private Collection<GrantedAuthority> authorities = new ArrayList<>();
 
     @Override
@@ -25,9 +27,10 @@ public class UserDetailsImp implements UserDetails {
         return authorities;
     }
 
-    public UserDetailsImp build(String userName, String password, String roleName) {
+    public UserDetailsImp build(String userName, String password, com.example.personal_blog.entity.User user, String roleName) {
         this.userName = userName;
         this.password = password;
+        this.user = user;
         this.authorities.add(new SimpleGrantedAuthority(roleName));
         return this;
     }

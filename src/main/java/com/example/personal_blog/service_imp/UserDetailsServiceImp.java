@@ -41,6 +41,6 @@ public class UserDetailsServiceImp implements UserDetailsService {
         if (role.getRoleName().equals("ADMIN") && user.getUserID() != 1) {
             throw new UsernameNotFoundException("authenticate error");
         }
-        return userDetailsImp.build(account.getUserName(), account.getPassword(), role.getRoleName());
+        return userDetailsImp.build(account.getUserName(), account.getPassword(), user, role.getRoleName());
     }
 }
