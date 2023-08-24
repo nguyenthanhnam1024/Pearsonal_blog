@@ -8,5 +8,5 @@ import org.springframework.validation.BindingResult;
 import javax.servlet.http.HttpServletResponse;
 
 public interface SecurityService {
-    ResponseEntity<Object> login(HttpServletResponse response, BindingResult bindingResult, Account account) throws MyValidateException;
+    ResponseEntity<Object> login(HttpServletResponse response, BindingResult bindingResult, Account account) throws Exception;
 }

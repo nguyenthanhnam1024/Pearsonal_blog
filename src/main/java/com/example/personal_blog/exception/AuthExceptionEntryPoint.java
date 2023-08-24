@@ -16,6 +16,8 @@ public class AuthExceptionEntryPoint implements AuthenticationEntryPoint {
         if (e.getMessage().equals("Expiration jwt")) {
             httpServletResponse.sendError(400, e.getMessage());
         }
-        httpServletResponse.sendError(httpServletResponse.getStatus(), e.getMessage());
+        httpServletResponse.setStatus(400);
+        httpServletResponse.getWriter().write(e.getMessage());
+        httpServletResponse.getWriter().flush();
     }
 }

@@ -20,7 +20,7 @@ public class SecurityController {
     private final SecurityService securityService;
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(HttpServletResponse response, @RequestBody @Valid Account account, BindingResult bindingResult) throws MyValidateException {
+    public ResponseEntity<Object> login(HttpServletResponse response, @RequestBody @Valid Account account, BindingResult bindingResult) throws Exception {
         return securityService.login(response, bindingResult, account);
     }
 }

@@ -10,6 +10,7 @@ import com.example.personal_blog.repository.RoleRepo;
 import com.example.personal_blog.repository.RoleUserRepo;
 import com.example.personal_blog.repository.UserRepo;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,7 +28,8 @@ public class UserDetailsServiceImp implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         Account account = accountRepo.findByUserName(userName)
-                .orElseThrow(() -> new UsernameNotFoundException("Account not found : " + userName));
+                .orElseThrow(() -> new AuthenticationException("Account not found : " + userName) {
+                });
 
         User user = userRepo.findByAccountID(account.getAccountID())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found for account: " + account.getUserName()));

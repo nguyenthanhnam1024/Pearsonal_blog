@@ -39,13 +39,12 @@ public class SecurityServiceImp implements SecurityService {
     private final RoleRepo roleRepo;
 
     @Override
-    public ResponseEntity<Object> login(HttpServletResponse response, BindingResult bindingResult, Account account) throws MyValidateException {
+    public ResponseEntity<Object> login(HttpServletResponse response, BindingResult bindingResult, Account account) throws Exception {
         Map<String, String> mapError = commons.handlesBindingResult(bindingResult);
         if (!mapError.isEmpty()) {
             return ResponseEntity.badRequest().body(mapError);
         }
-
-
+        
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         account.getUserName(),
