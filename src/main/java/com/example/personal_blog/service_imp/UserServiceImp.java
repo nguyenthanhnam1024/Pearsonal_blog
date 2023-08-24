@@ -35,29 +35,32 @@ public class UserServiceImp implements UserService {
     @Override
     public ResponseEntity<Object> updateInfoUser(HttpServletRequest request, User user, BindingResult result) throws MyValidateException {
         Map<String, String> mapError = commons.handlesBindingResult(result);
-        if (!user.getEmail().equals("user@gmail.com")) {
-            Optional<User> userOptional = userRepo.findByEmail(user.getEmail());
-            if (userOptional.isPresent()) {
-                mapError.put("email", "email '"+user.getEmail()+"' is already in use");
-            }
-        }
-        if (!mapError.isEmpty()) {
-            return ResponseEntity.badRequest().body(mapError);
-        }
         Optional<Account> accountOptional = accountRepo.findByUserName(extractDataFromJwt.extractUserName(request));
         if (accountOptional.isPresent()) {
             Optional<User> oldUserOptional = userRepo.findById(accountOptional.get().getUserID());
             if (oldUserOptional.isPresent()) {
-               if (oldUserOptional.get().getEmail().equals("user@gmail.com")) {
-                   user.setUserID(oldUserOptional.get().getUserID());
-                   try {
-                       userRepo.save(user);
-                       return ResponseEntity.ok("user update success");
-                   } catch (Exception ex) {
-                       throw new MyValidateException("error query");
-                   }
-               }
-               throw new MyValidateException("cant use email : " + user.getEmail());
+                if (!oldUserOptional.get().getEmail().equals(user.getEmail())) {
+                    Optional<User> userFindByEmail = userRepo.findByEmail(user.getEmail());
+                    if (userFindByEmail.isPresent()) {
+                        mapError.put("email", "email " + user.getEmail() + " is already in use");
+                    }
+                }
+                if (!oldUserOptional.get().getPhoneNumber().equals(user.getPhoneNumber())) {
+                    Optional<User> userFindByPhone = userRepo.findUserByPhoneNumber(user.getPhoneNumber());
+                    if (userFindByPhone.isPresent()) {
+                        mapError.put("phoneNumber", "phone number " + user.getPhoneNumber() + " is already in use");
+                    }
+                }
+                if (!mapError.isEmpty()) {
+                    return ResponseEntity.badRequest().body(mapError);
+                }
+                user.setUserID(oldUserOptional.get().getUserID());
+                try {
+                    userRepo.save(user);
+                    return ResponseEntity.ok("user update success");
+                } catch (Exception ex) {
+                    throw new MyValidateException("error query");
+                }
             }
         }
         throw new MyValidateException("authentication error");

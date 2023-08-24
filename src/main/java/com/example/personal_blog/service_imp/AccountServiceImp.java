@@ -32,7 +32,7 @@ public class AccountServiceImp implements AccountService {
 
     @Override
     @Transactional
-    public ResponseEntity<Object> createAccount(Account account, BindingResult bindingResult) throws MyValidateException {
+    public ResponseEntity<Object> register(Account account, User user, BindingResult bindingResult) throws MyValidateException {
         Map<String, String> mapError = commons.handlesBindingResult(bindingResult);
         Optional<Account> newAccount = accountRepo.findByUserName(account.getUserName());
         if (newAccount.isPresent()) {
@@ -41,15 +41,23 @@ public class AccountServiceImp implements AccountService {
         if (account.getPassword().length() < 6 || account.getPassword().length() > 50) {
             mapError.put("password", "password must from 6 to 50 keyword");
         }
+        Optional<User> userFindByEmail = userRepo.findByEmail(user.getEmail());
+        if (userFindByEmail.isPresent()) {
+            mapError.put("email", "email " + user.getEmail() + " is already in use");
+        }
+        Optional<User> userFindByPhone = userRepo.findUserByPhoneNumber(user.getPhoneNumber());
+        if (userFindByPhone.isPresent()) {
+            mapError.put("phoneNumber", "phone number " + user.getPhoneNumber() + " is already in use");
+        }
         if (mapError.isEmpty()) {
             try {
-                User user = userRepo.save(new User(0, null, "user", 20, "user@gmail.com","0123456789", "user address"));
+                User userStored = userRepo.save(user);
                 BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
                 String passwordEncode = bc.encode(account.getPassword());
                 account.setPassword(passwordEncode);
-                account.setUserID(user.getUserID());
+                account.setUserID(userStored.getUserID());
                 accountRepo.save(account);
-                roleUserRepo.save(new RoleUser(user.getUserID(), 2));
+                roleUserRepo.save(new RoleUser(userStored.getUserID(), 2));
                 return ResponseEntity.ok("Create Account success");
             } catch (Exception ex) {
                 throw new MyValidateException(ex.getMessage());

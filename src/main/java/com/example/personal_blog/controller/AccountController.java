@@ -2,6 +2,7 @@ package com.example.personal_blog.controller;
 
 import com.example.personal_blog.entity.Account;
 import com.example.personal_blog.exception.MyValidateException;
+import com.example.personal_blog.request.RequestRegister;
 import com.example.personal_blog.request.RequestUpdateAccount;
 import com.example.personal_blog.service.AccountService;
 import lombok.AllArgsConstructor;
@@ -18,9 +19,9 @@ import javax.validation.Valid;
 public class AccountController {
     private final AccountService accountService;
 
-    @PostMapping("/create")
-    public ResponseEntity<Object> createAccount(@RequestBody @Valid Account account, BindingResult bindingResult) throws MyValidateException {
-        return accountService.createAccount(account, bindingResult);
+    @PostMapping("/register")
+    public ResponseEntity<Object> register(@RequestBody @Valid RequestRegister requestRegister, BindingResult bindingResult) throws MyValidateException {
+        return accountService.register(requestRegister.getAccount(), requestRegister.getUser(), bindingResult);
     }
 
     @PutMapping("/update")
