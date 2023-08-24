@@ -31,7 +31,7 @@ public class UserDetailsServiceImp implements UserDetailsService {
                 .orElseThrow(() -> new AuthenticationException("Account not found : " + userName) {
                 });
 
-        User user = userRepo.findByAccountID(account.getAccountID())
+        User user = userRepo.findById(account.getUserID())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found for account: " + account.getUserName()));
 
         RoleUser roleUser = roleUserRepo.findByUserID(user.getUserID())

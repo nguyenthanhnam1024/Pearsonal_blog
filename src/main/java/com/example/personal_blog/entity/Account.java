@@ -25,4 +25,6 @@ public class Account {
 
     @NotBlank(message = "password must other blank")
     private String password;
+
+    private long userID;
 }

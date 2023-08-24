@@ -46,15 +46,18 @@ public class UserServiceImp implements UserService {
         }
         Optional<Account> accountOptional = accountRepo.findByUserName(extractDataFromJwt.extractUserName(request));
         if (accountOptional.isPresent()) {
-            Optional<User> oldUserOptional = userRepo.findByAccountID(accountOptional.get().getAccountID());
+            Optional<User> oldUserOptional = userRepo.findById(accountOptional.get().getUserID());
             if (oldUserOptional.isPresent()) {
-                user.setUserID(oldUserOptional.get().getUserID());
-                try {
-                    userRepo.save(user);
-                    return ResponseEntity.ok("user update success");
-                } catch (Exception ex) {
-                    throw new MyValidateException("error query");
-                }
+               if (oldUserOptional.get().getEmail().equals("user@gmail.com")) {
+                   user.setUserID(oldUserOptional.get().getUserID());
+                   try {
+                       userRepo.save(user);
+                       return ResponseEntity.ok("user update success");
+                   } catch (Exception ex) {
+                       throw new MyValidateException("error query");
+                   }
+               }
+               throw new MyValidateException("cant use email : " + user.getEmail());
             }
         }
         throw new MyValidateException("authentication error");

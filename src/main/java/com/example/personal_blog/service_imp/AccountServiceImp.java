@@ -43,11 +43,12 @@ public class AccountServiceImp implements AccountService {
         }
         if (mapError.isEmpty()) {
             try {
+                User user = userRepo.save(new User(0, null, "user", 20, "user@gmail.com","0123456789", "user address"));
                 BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
                 String passwordEncode = bc.encode(account.getPassword());
                 account.setPassword(passwordEncode);
-                Account accountStored = accountRepo.save(account);
-                User user = userRepo.save(new User(0, null, "user", 20, "user@gmail.com","0123456789", "user address", accountStored.getAccountID()));
+                account.setUserID(user.getUserID());
+                accountRepo.save(account);
                 roleUserRepo.save(new RoleUser(user.getUserID(), 2));
                 return ResponseEntity.ok("Create Account success");
             } catch (Exception ex) {
@@ -74,13 +75,14 @@ public class AccountServiceImp implements AccountService {
         if (!bc.matches(requestUpdateAccount.getOldPassword(), accountOptional.get().getPassword())) {
             throw new MyValidateException("Old password does not match the stored password");
         }
-        Optional<User> userOptional = userRepo.findByName(requestUpdateAccount.getFullNameUser());
+        Optional<User> userOptional = userRepo.findById(accountOptional.get().getUserID());
         if (userOptional.isPresent()) {
-            if (accountOptional.get().getAccountID() == (userOptional.get().getAccountID())) {
+            if (userOptional.get().getUserID() == accountOptional.get().getUserID()) {
                 Account account = new Account();
                 account.setAccountID(accountOptional.get().getAccountID());
                 account.setUserName(requestUpdateAccount.getUserName());
                 account.setPassword(bc.encode(requestUpdateAccount.getNewPassword()));
+                account.setUserID(accountOptional.get().getUserID());
                 try {
                     accountRepo.save(account);
                     return ResponseEntity.ok("account update successful");
@@ -99,7 +101,7 @@ public class AccountServiceImp implements AccountService {
         if (accountOptional.isPresent()) {
             BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
             if (bc.matches(password, accountOptional.get().getPassword())) {
-                Optional<User> userOptional = userRepo.findByAccountID(accountOptional.get().getAccountID());
+                Optional<User> userOptional = userRepo.findById(accountOptional.get().getUserID());
                 if (userOptional.isPresent()) {
                     try {
                         roleUserRepo.deleteRoleUserByUserID(userOptional.get().getUserID());
