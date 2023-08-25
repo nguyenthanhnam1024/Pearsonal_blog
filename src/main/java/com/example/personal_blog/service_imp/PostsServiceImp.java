@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 
@@ -40,6 +41,7 @@ public class PostsServiceImp implements PostsService {
             }
             try {
                 posts.setUserID(userOptional.get().getUserID());
+                posts.setPostTime(LocalDate.now());
                 postsRepo.save(posts);
                 return ResponseEntity.ok("create posts success");
             } catch (Exception e) {

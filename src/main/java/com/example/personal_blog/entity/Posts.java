@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -24,5 +25,8 @@ public class Posts {
 
     @NotBlank(message = "title must other blank")
     private String content;
+
     private long userID;
+
+    private LocalDate postTime;
 }
