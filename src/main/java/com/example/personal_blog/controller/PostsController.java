@@ -26,4 +26,9 @@ public class PostsController {
     public ResponseEntity<Object> getAllPosts(HttpServletRequest request) throws MyValidateException {
         return postsService.getAllPosts(request);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Object> deletePosts(HttpServletRequest request, @RequestBody Posts posts) throws MyValidateException {
+        return postsService.deletePosts(request, posts);
+    }
 }

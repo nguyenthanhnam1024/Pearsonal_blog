@@ -63,4 +63,27 @@ public class PostsServiceImp implements PostsService {
         }
         throw new MyValidateException("authentication error");
     }
+
+    @Override
+    public ResponseEntity<Object> deletePosts(HttpServletRequest request, Posts posts) throws MyValidateException {
+        Map<String, Object> infoUser = extractDataFromJwt.extractInfoUser(request);
+        Integer userIDTypeInteger = (Integer) infoUser.get("userID");
+        Optional<User> userOptional = userRepo.findById((long) userIDTypeInteger);
+        if (userOptional.isPresent()) {
+            if (userOptional.get().getUserID() == posts.getUserID()) {
+                Optional<Posts> postsOptional = postsRepo.findByUserIDAndTitleAndContent((long) userIDTypeInteger, posts.getTitle(), posts.getContent());
+                if (postsOptional.isPresent()) {
+                    try {
+                        postsRepo.delete(posts);
+                        return ResponseEntity.ok("posts delete success");
+                    } catch (Exception e) {
+                        throw new MyValidateException("error query");
+                    }
+                }
+                throw new MyValidateException("Couldn't find your post to delete");
+            }
+            throw new MyValidateException("authentication failed");
+        }
+        throw new MyValidateException("authentication error");
+    }
 }

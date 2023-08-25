@@ -10,4 +10,5 @@ import javax.servlet.http.HttpServletRequest;
 public interface PostsService {
     ResponseEntity<Object> createPosts(HttpServletRequest request, Posts posts, BindingResult result) throws MyValidateException;
     ResponseEntity<Object> getAllPosts(HttpServletRequest request) throws MyValidateException;
+    ResponseEntity<Object> deletePosts(HttpServletRequest request, Posts posts) throws MyValidateException;
 }
