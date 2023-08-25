@@ -39,13 +39,11 @@ public class SecurityServiceImp implements SecurityService {
     private final RoleRepo roleRepo;
 
     @Override
-    public void login(HttpServletResponse response, BindingResult bindingResult, Account account) throws MyValidateException {
+    public ResponseEntity<Object> login(HttpServletResponse response, BindingResult bindingResult, Account account) throws Exception {
         Map<String, String> mapError = commons.handlesBindingResult(bindingResult);
         if (!mapError.isEmpty()) {
-            ResponseEntity.status(400).body(mapError);
-            return;
+            return ResponseEntity.badRequest().body(mapError);
         }
-
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -60,15 +58,15 @@ public class SecurityServiceImp implements SecurityService {
         ResponseLogin responseLogin = new ResponseLogin();
         try {
             Optional<Account> accountExist = accountRepo.findByUserName(account.getUserName());
-            Optional<User> user = userRepo.findByAccountID(accountExist.get().getAccountID());
+            Optional<User> user = userRepo.findById(accountExist.get().getUserID());
             Optional<RoleUser> roleUser = roleUserRepo.findByUserID(user.get().getUserID());
             Optional<Role> role = roleRepo.findById(roleUser.get().getRoleID());
             ModelMapper modelMapper = new ModelMapper();
             responseLogin = modelMapper.map(user, ResponseLogin.class);
             responseLogin.setRoleName(role.get().getRoleName());
         } catch (Exception ex) {
-            throw new MyValidateException("error validation");
+            throw new MyValidateException("authentication error");
         }
-        ResponseEntity.ok(responseLogin);
+        return ResponseEntity.ok(responseLogin);
     }
 }

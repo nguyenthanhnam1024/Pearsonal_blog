@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class MyHandlesException {
     @ExceptionHandler(MyValidateException.class)
     public ResponseEntity<?> handleMyValidateException(MyValidateException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+        return ResponseEntity.status(404).body(ex.getMessage());
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
