@@ -48,4 +48,19 @@ public class PostsServiceImp implements PostsService {
         }
         throw new MyValidateException("authentication error");
     }
+
+    @Override
+    public ResponseEntity<Object> getAllPosts(HttpServletRequest request) throws MyValidateException {
+        Map<String, Object> infoUser =  extractDataFromJwt.extractInfoUser(request);
+        Integer userTypeInteger = (Integer) infoUser.get("userID");
+        Optional<User> userOptional = userRepo.findById((long) userTypeInteger);
+        if (userOptional.isPresent()) {
+            try {
+                return ResponseEntity.ok(postsRepo.findAllByUserID((long) userTypeInteger));
+            } catch (Exception e) {
+                throw new MyValidateException("error query");
+            }
+        }
+        throw new MyValidateException("authentication error");
+    }
 }
