@@ -2,6 +2,7 @@ package com.example.personal_blog.controller;
 
 import com.example.personal_blog.entity.User;
 import com.example.personal_blog.exception.MyValidateException;
+import com.example.personal_blog.response.ResponseLogin;
 import com.example.personal_blog.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,5 +26,10 @@ public class UserController {
     @PutMapping("/update")
     public ResponseEntity<Object> updateUser(HttpServletRequest request, @RequestBody @Valid User user, BindingResult result) throws MyValidateException {
         return userService.updateInfoUser(request, user, result);
+    }
+
+    @PutMapping("/updateByAdmin")
+    public ResponseEntity<Object> updateByAdmin(HttpServletRequest request,@RequestBody ResponseLogin responseLogin) throws MyValidateException {
+        return userService.updateRoleForUserByAdmin(request, responseLogin);
     }
 }
