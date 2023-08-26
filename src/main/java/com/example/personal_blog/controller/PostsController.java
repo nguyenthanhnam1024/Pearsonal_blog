@@ -4,6 +4,10 @@ import com.example.personal_blog.entity.Posts;
 import com.example.personal_blog.exception.MyValidateException;
 import com.example.personal_blog.service.PostsService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +26,10 @@ public class PostsController {
         return postsService.createPosts(request,posts, result);
     }
 
-    @GetMapping("/getAll")
-    public ResponseEntity<Object> getAllPosts(HttpServletRequest request) throws MyValidateException {
-        return postsService.getAllPosts(request);
+    @GetMapping("/getAll/{page}")
+    public ResponseEntity<Page<Posts>> getPostsOfUserByPageDescending(HttpServletRequest request, @PathVariable int page) throws MyValidateException {
+        Pageable pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "postsID");
+        return postsService.getPostsOfUserByPageDescending(request, pageable);
     }
 
     @DeleteMapping("/delete")

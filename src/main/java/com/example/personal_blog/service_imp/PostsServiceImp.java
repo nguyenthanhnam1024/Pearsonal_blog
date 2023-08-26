@@ -8,6 +8,8 @@ import com.example.personal_blog.repository.PostsRepo;
 import com.example.personal_blog.repository.UserRepo;
 import com.example.personal_blog.service.PostsService;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
@@ -40,25 +42,31 @@ public class PostsServiceImp implements PostsService {
                 throw new MyValidateException("You already have a similar post");
             }
             try {
+                Object postIDMax = postsRepo.findPostIDMax();
+                if (postIDMax == null) {
+                    posts.setPostsID(1);
+                } else {
+                    posts.setPostsID((long) postsRepo.findPostIDMax() + 1);
+                }
                 posts.setUserID(userOptional.get().getUserID());
                 posts.setPostTime(LocalDate.now());
                 postsRepo.save(posts);
                 return ResponseEntity.ok("create posts success");
             } catch (Exception e) {
-                throw new MyValidateException("error query");
+                throw new MyValidateException("error query"+e.getMessage());
             }
         }
         throw new MyValidateException("authentication error");
     }
 
     @Override
-    public ResponseEntity<Object> getAllPosts(HttpServletRequest request) throws MyValidateException {
+    public ResponseEntity<Page<Posts>> getPostsOfUserByPageDescending(HttpServletRequest request, Pageable pageable) throws MyValidateException {
         Map<String, Object> infoUser =  extractDataFromJwt.extractInfoUser(request);
         Integer userTypeInteger = (Integer) infoUser.get("userID");
         Optional<User> userOptional = userRepo.findById((long) userTypeInteger);
         if (userOptional.isPresent()) {
             try {
-                return ResponseEntity.ok(postsRepo.findAllByUserID((long) userTypeInteger));
+                return ResponseEntity.ok(postsRepo.findByUserID(userOptional.get().getUserID(), pageable));
             } catch (Exception e) {
                 throw new MyValidateException("error query");
             }

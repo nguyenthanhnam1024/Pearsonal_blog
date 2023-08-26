@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
@@ -15,18 +12,18 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
+@IdClass(PostsID.class)
 public class Posts {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long postsID;
+    @Id
+    private long userID;
 
     @NotBlank(message = "title must other blank")
     private String title;
 
     @NotBlank(message = "title must other blank")
     private String content;
-
-    private long userID;
 
     private LocalDate postTime;
 }
