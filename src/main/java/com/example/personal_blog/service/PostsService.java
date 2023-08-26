@@ -14,4 +14,5 @@ public interface PostsService {
     ResponseEntity<Page<Posts>> getPostsOfUserByPageDescending(HttpServletRequest request, Pageable pageable) throws MyValidateException;
     ResponseEntity<Object> deletePosts(HttpServletRequest request, Posts posts) throws MyValidateException;
     ResponseEntity<Page<Posts>> findAllLimit10Descending(Pageable pageable) throws MyValidateException;
+    ResponseEntity<Object> updatePosts(HttpServletRequest request, Posts posts, BindingResult result) throws MyValidateException;
 }

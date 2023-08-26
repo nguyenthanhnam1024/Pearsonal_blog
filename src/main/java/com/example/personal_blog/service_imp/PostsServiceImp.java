@@ -105,4 +105,26 @@ public class PostsServiceImp implements PostsService {
             throw new MyValidateException("error query");
         }
     }
+
+    @Override
+    public ResponseEntity<Object> updatePosts(HttpServletRequest request, Posts posts, BindingResult result) throws MyValidateException {
+        Map<String, String> mapError = commons.handlesBindingResult(result);
+        if (!mapError.isEmpty()) {
+            return ResponseEntity.badRequest().body(mapError);
+        }
+        Map<String, Object> infoUser = extractDataFromJwt.extractInfoUser(request);
+        Integer idUserTypeInteger = (Integer) infoUser.get("userID");
+        if ((long) idUserTypeInteger != posts.getUserID()) {
+            throw new MyValidateException("authentication failed");
+        }
+        Optional<Posts> postsOptional = postsRepo.findByUserIDAndPostsID((long) idUserTypeInteger, posts.getPostsID());
+        if (postsOptional.isPresent()) {
+            Posts postsExist = postsOptional.get();
+            postsExist.setTitle(posts.getTitle());
+            postsExist.setContent(posts.getContent());
+            postsRepo.save(postsExist);
+            return ResponseEntity.ok("posts update success");
+        }
+        throw new MyValidateException("Can't find this pots to update");
+    }
 }

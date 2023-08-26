@@ -42,4 +42,9 @@ public class PostsController {
         Pageable pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "postTime");
         return postsService.findAllLimit10Descending(pageable);
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<Object> updatePosts(HttpServletRequest request,@RequestBody @Valid Posts posts, BindingResult result) throws MyValidateException {
+        return postsService.updatePosts(request, posts, result);
+    }
 }
