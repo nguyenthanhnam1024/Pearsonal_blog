@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletRequest;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -42,14 +42,14 @@ public class PostsServiceImp implements PostsService {
                 throw new MyValidateException("You already have a similar post");
             }
             try {
-                Object postIDMax = postsRepo.findPostIDMax();
+                Object postIDMax = postsRepo.findPostIDMax((long) userTypeInteger);
                 if (postIDMax == null) {
                     posts.setPostsID(1);
                 } else {
-                    posts.setPostsID((long) postsRepo.findPostIDMax() + 1);
+                    posts.setPostsID((long) postIDMax + 1);
                 }
                 posts.setUserID(userOptional.get().getUserID());
-                posts.setPostTime(LocalDate.now());
+                posts.setPostTime(new Date());
                 postsRepo.save(posts);
                 return ResponseEntity.ok("create posts success");
             } catch (Exception e) {
@@ -95,5 +95,14 @@ public class PostsServiceImp implements PostsService {
             throw new MyValidateException("authentication failed");
         }
         throw new MyValidateException("authentication error");
+    }
+
+    @Override
+    public ResponseEntity<Page<Posts>> findAllLimit10Descending(Pageable pageable) throws MyValidateException {
+        try {
+            return ResponseEntity.ok(postsRepo.findAll(pageable));
+        } catch (Exception e) {
+            throw new MyValidateException("error query");
+        }
     }
 }

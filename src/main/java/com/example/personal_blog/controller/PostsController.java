@@ -26,7 +26,7 @@ public class PostsController {
         return postsService.createPosts(request,posts, result);
     }
 
-    @GetMapping("/getAll/{page}")
+    @GetMapping("/findPostsOfUser/{page}")
     public ResponseEntity<Page<Posts>> getPostsOfUserByPageDescending(HttpServletRequest request, @PathVariable int page) throws MyValidateException {
         Pageable pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "postsID");
         return postsService.getPostsOfUserByPageDescending(request, pageable);
@@ -35,5 +35,11 @@ public class PostsController {
     @DeleteMapping("/delete")
     public ResponseEntity<Object> deletePosts(HttpServletRequest request, @RequestBody Posts posts) throws MyValidateException {
         return postsService.deletePosts(request, posts);
+    }
+
+    @GetMapping("/findPostsOfUsers/{page}")
+    public ResponseEntity<Page<Posts>> findPostsOfUsers(@PathVariable int page) throws MyValidateException {
+        Pageable pageable = PageRequest.of(page, 10, Sort.Direction.DESC, "postTime");
+        return postsService.findAllLimit10Descending(pageable);
     }
 }

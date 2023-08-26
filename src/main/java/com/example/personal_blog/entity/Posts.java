@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Data
@@ -25,5 +25,5 @@ public class Posts {
     @NotBlank(message = "title must other blank")
     private String content;
 
-    private LocalDate postTime;
+    private Date postTime;
 }
