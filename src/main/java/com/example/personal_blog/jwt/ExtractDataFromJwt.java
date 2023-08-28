@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class ExtractDataFromJwt {
@@ -48,5 +45,11 @@ public class ExtractDataFromJwt {
     public LinkedHashMap<String, Object> extractInfoUser(HttpServletRequest request) {
         Jws<Claims> claimsJws = Jwts.parser().setSigningKey(JWT_SECRET).parseClaimsJws(authFilter.getJwtFromRequest(request));
         return  (LinkedHashMap<String, Object>) claimsJws.getBody().get("user");
+    }
+
+    public long getUserID(HttpServletRequest request) {
+        Map<String, Object> infoUser =  this.extractInfoUser(request);
+        Integer userTypeInteger = (Integer) infoUser.get("userID");
+        return (long) userTypeInteger;
     }
 }
