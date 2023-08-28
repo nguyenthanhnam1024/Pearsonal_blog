@@ -65,4 +65,25 @@ public class CommentServiceImp implements CommentService {
             throw new MyValidateException("error query");
         }
     }
+
+    @Override
+    public ResponseEntity<Object> deleteComment(HttpServletRequest request, Comment comment) throws MyValidateException {
+        long userID = extractDataFromJwt.getUserID(request);
+        if (userID != comment.getUserID()) {
+            return ResponseEntity.badRequest().build();
+        }
+        Optional<Comment> commentOptional = commentRepo.findByCommentIDAndPostsIDAndUserID(comment.getCommentID(), comment.getPostsID(), comment.getUserID());
+        if (!commentOptional.isPresent()) {
+            return ResponseEntity.badRequest().build();
+        }
+        if (!comment.getContent().equals(commentOptional.get().getContent())) {
+            return ResponseEntity.badRequest().build();
+        }
+        try {
+            commentRepo.delete(comment);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            throw new MyValidateException("error query");
+        }
+    }
 }

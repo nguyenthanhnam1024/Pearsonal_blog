@@ -26,4 +26,9 @@ public class CommentController {
     public ResponseEntity<Object> getCommentByPostsID(@RequestParam long postsID, @RequestParam long userID) throws MyValidateException {
         return commentService.getCommentsByPostsIDAndUserID(postsID, userID);
     }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<Object> deleteComment(HttpServletRequest request, @RequestBody Comment comment) throws MyValidateException {
+        return commentService.deleteComment(request, comment);
+    }
 }
