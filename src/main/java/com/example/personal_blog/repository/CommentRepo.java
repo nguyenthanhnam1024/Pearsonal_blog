@@ -7,8 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CommentRepo extends JpaRepository<Comment, CommentID> {
     @Query("select max(c.commentID) from Comment  c where c.userID = :userID and c.postsID = :postsID")
     Object findMaxCommentIDByUserIDAndPostsID(@Param("userID") long userID, @Param("postsID") long postsID);
+    List<Comment> findByPostsIDAndUserID(long postsID, long userID);
 }

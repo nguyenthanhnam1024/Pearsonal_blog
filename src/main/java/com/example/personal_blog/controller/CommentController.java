@@ -6,10 +6,7 @@ import com.example.personal_blog.service.CommentService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -23,5 +20,10 @@ public class CommentController {
     @PostMapping("/create")
     public ResponseEntity<Object> createComment(HttpServletRequest request, @RequestBody @Valid Comment comment, BindingResult result) throws MyValidateException {
         return commentService.createComment(request, comment, result);
+    }
+
+    @GetMapping("getByPostsIDAndUserID")
+    public ResponseEntity<Object> getCommentByPostsID(@RequestParam long postsID, @RequestParam long userID) throws MyValidateException {
+        return commentService.getCommentsByPostsIDAndUserID(postsID, userID);
     }
 }

@@ -56,4 +56,13 @@ public class CommentServiceImp implements CommentService {
         }
         throw new MyValidateException("authentication error");
     }
+
+    @Override
+    public ResponseEntity<Object> getCommentsByPostsIDAndUserID(long postsID, long userID) throws MyValidateException {
+        try {
+            return ResponseEntity.ok(commentRepo.findByPostsIDAndUserID(postsID, userID));
+        } catch (Exception e) {
+            throw new MyValidateException("error query");
+        }
+    }
 }
