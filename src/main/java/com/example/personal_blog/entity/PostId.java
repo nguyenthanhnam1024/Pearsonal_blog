@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class PostsID implements Serializable {
-    private long postsID;
-    private long userID;
+public class PostId implements Serializable {
+    private long postId;
+    private long userId;
 }

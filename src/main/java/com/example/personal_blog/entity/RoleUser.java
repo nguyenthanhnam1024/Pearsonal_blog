@@ -12,10 +12,10 @@ import javax.persistence.IdClass;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@IdClass(RoleUserID.class)
+@IdClass(RoleUserId.class)
 public class RoleUser {
     @Id
-    private long userID;
+    private long userId;
     @Id
-    private int roleID;
+    private int roleId;
 }

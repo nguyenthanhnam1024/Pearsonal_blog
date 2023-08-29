@@ -1,7 +1,7 @@
 package com.example.personal_blog.repository;
 
-import com.example.personal_blog.entity.Posts;
-import com.example.personal_blog.entity.PostsID;
+import com.example.personal_blog.entity.Post;
+import com.example.personal_blog.entity.PostId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,10 +13,10 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 @Repository
-public interface PostsRepo extends JpaRepository<Posts, PostsID> {
-    Page<Posts> findByUserID(long userId, Pageable pageable);
-    Optional<Posts> findByUserIDAndTitleAndContent(long userID, String title, String content);
-    @Query("select max(p.postsID) from Posts p where p.userID = :userID")
-    Object findPostIDMax(@Param("userID") long userID);
-    Optional<Posts> findByUserIDAndPostsID(long userID, long postsID);
+public interface PostsRepo extends JpaRepository<Post, PostId> {
+    Page<Post> findByUserId(long userId, Pageable pageable);
+    Optional<Post> findByUserIdAndTitleAndContent(long userId, String title, String content);
+    @Query("select max(p.postId) from Post p where p.userId = :userId")
+    Object findPostIDMax(@Param("userId") long userId);
+    Optional<Post> findByUserIdAndPostId(long userID, long postsID);
 }

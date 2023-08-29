@@ -12,12 +12,12 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@IdClass(PostsID.class)
-public class Posts {
+@IdClass(PostId.class)
+public class Post {
     @Id
-    private long postsID;
+    private long postId;
     @Id
-    private long userID;
+    private long userId;
 
     @NotBlank(message = "title must other blank")
     private String title;

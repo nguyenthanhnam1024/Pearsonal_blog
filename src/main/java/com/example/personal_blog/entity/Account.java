@@ -18,7 +18,7 @@ import javax.validation.constraints.Size;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long accountID;
+    private long accountId;
 
     @Size(min = 2, max = 50, message = "userName from 2 to 50 keyword")
     private String userName;

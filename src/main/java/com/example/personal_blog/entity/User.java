@@ -17,7 +17,7 @@ import javax.validation.constraints.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userID;
+    private long userId;
 
     private String avatar;
 

@@ -22,9 +22,9 @@ public class CommentController {
         return commentService.createComment(request, comment, result);
     }
 
-    @GetMapping("getByPostsIDAndUserID")
-    public ResponseEntity<Object> getCommentByPostsID(@RequestParam long postsID, @RequestParam long userID) throws MyValidateException {
-        return commentService.getCommentsByPostsIDAndUserID(postsID, userID);
+    @GetMapping("getByPostIdAndUserId")
+    public ResponseEntity<Object> getCommentByPostsID(@RequestParam long postId, @RequestParam long userIdOwn) throws MyValidateException {
+        return commentService.getCommentsByPostIdAndUserIdOwn(postId, userIdOwn);
     }
 
     @DeleteMapping("/delete")

@@ -13,14 +13,16 @@ import javax.validation.constraints.NotBlank;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@IdClass(CommentID.class)
+@IdClass(CommentId.class)
 public class Comment {
     @Id
-    private long commentID;
+    private long commentId;
     @Id
-    private long userID;
+    private long userIdAddComment;
     @Id
-    private long postsID;
+    private long userIdOwnComment;
+    @Id
+    private long postId;
     @NotBlank(message = "content must other blank")
     private String content;
 }

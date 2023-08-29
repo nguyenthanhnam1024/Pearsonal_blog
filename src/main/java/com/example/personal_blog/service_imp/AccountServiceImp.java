@@ -55,9 +55,9 @@ public class AccountServiceImp implements AccountService {
                 BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
                 String passwordEncode = bc.encode(account.getPassword());
                 account.setPassword(passwordEncode);
-                account.setUserID(userStored.getUserID());
+                account.setUserID(userStored.getUserId());
                 accountRepo.save(account);
-                roleUserRepo.save(new RoleUser(userStored.getUserID(), 2));
+                roleUserRepo.save(new RoleUser(userStored.getUserId(), 2));
                 return ResponseEntity.ok("Create Account success");
             } catch (Exception ex) {
                 throw new MyValidateException(ex.getMessage());
@@ -85,9 +85,9 @@ public class AccountServiceImp implements AccountService {
         }
         Optional<User> userOptional = userRepo.findById(accountOptional.get().getUserID());
         if (userOptional.isPresent()) {
-            if (userOptional.get().getUserID() == accountOptional.get().getUserID()) {
+            if (userOptional.get().getUserId() == accountOptional.get().getUserID()) {
                 Account account = new Account();
-                account.setAccountID(accountOptional.get().getAccountID());
+                account.setAccountId(accountOptional.get().getAccountId());
                 account.setUserName(requestUpdateAccount.getUserName());
                 account.setPassword(bc.encode(requestUpdateAccount.getNewPassword()));
                 account.setUserID(accountOptional.get().getUserID());
@@ -112,7 +112,7 @@ public class AccountServiceImp implements AccountService {
                 Optional<User> userOptional = userRepo.findById(accountOptional.get().getUserID());
                 if (userOptional.isPresent()) {
                     try {
-                        roleUserRepo.deleteRoleUserByUserID(userOptional.get().getUserID());
+                        roleUserRepo.deleteRoleUserByUserId(userOptional.get().getUserId());
                         userRepo.delete(userOptional.get());
                         accountRepo.delete(accountOptional.get());
                         return ResponseEntity.ok("account delete success");

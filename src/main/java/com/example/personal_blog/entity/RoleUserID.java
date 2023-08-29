@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class RoleUserID implements Serializable {
-    private int roleID;
-    private long userID;
+public class RoleUserId implements Serializable {
+    private int roleId;
+    private long userId;
 }

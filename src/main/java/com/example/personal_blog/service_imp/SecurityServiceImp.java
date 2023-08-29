@@ -55,12 +55,12 @@ public class SecurityServiceImp implements SecurityService {
         String jwt = jwtUtils.generateJwt((UserDetailsImp) authentication.getPrincipal());
         response.addHeader("Authorization", "Bearer "+jwt);
 
-        ResponseLogin responseLogin = new ResponseLogin();
+        ResponseLogin responseLogin;
         try {
             Optional<Account> accountExist = accountRepo.findByUserName(account.getUserName());
             Optional<User> user = userRepo.findById(accountExist.get().getUserID());
-            Optional<RoleUser> roleUser = roleUserRepo.findByUserID(user.get().getUserID());
-            Optional<Role> role = roleRepo.findById(roleUser.get().getRoleID());
+            Optional<RoleUser> roleUser = roleUserRepo.findByUserId(user.get().getUserId());
+            Optional<Role> role = roleRepo.findById(roleUser.get().getRoleId());
             ModelMapper modelMapper = new ModelMapper();
             responseLogin = modelMapper.map(user, ResponseLogin.class);
             responseLogin.setRoleName(role.get().getRoleName());

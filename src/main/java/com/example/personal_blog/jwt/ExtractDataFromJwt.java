@@ -47,9 +47,9 @@ public class ExtractDataFromJwt {
         return  (LinkedHashMap<String, Object>) claimsJws.getBody().get("user");
     }
 
-    public long getUserID(HttpServletRequest request) {
+    public long getUserId(HttpServletRequest request) {
         Map<String, Object> infoUser =  this.extractInfoUser(request);
-        Integer userTypeInteger = (Integer) infoUser.get("userID");
+        Integer userTypeInteger = (Integer) infoUser.get("userId");
         return (long) userTypeInteger;
     }
 }
