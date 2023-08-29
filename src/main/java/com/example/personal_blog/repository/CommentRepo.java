@@ -12,8 +12,8 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepo extends JpaRepository<Comment, CommentId> {
-    @Query("select max(c.commentId) from Comment  c where c.userIdOwnComment = :userIdOwn and c.postId = :postId")
-    Object findMaxCommentIdByUserIdOwnAndPostId(@Param("userIdOwn") long userIdOwn, @Param("postId") long postId);
-    List<Comment> findByPostIdAndUserIdOwnComment(long postId, long userIdOwn);
-    Optional<Comment> findByCommentIdAndPostIdAndUserIdOwnComment(long commentId, long postId, long userIdOwmComment);
+    @Query("select max(c.commentId) from Comment  c where c.userIdOwnPost = :userIdOwnPost and c.postId = :postId")
+    Object findMaxCommentIdByUserIdOwnPostAndPostId(@Param("userIdOwnPost") long userIdOwnPost, @Param("postId") long postId);
+    List<Comment> findByPostIdAndUserIdOwnPost(long postId, long userIdOwnPost);
+    Optional<Comment> findByCommentIdAndPostIdAndUserIdOwnPost(long commentId, long postId, long userIdOwnPost);
 }

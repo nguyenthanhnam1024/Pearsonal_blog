@@ -38,12 +38,12 @@ public class CommentServiceImp implements CommentService {
         long userIdAddComment = extractDataFromJwt.getUserId(request);
         Optional<User> userOptional = userRepo.findById(userIdAddComment);
         if (userOptional.isPresent()) {
-            Optional<Post> postsOptional = postsRepo.findByUserIdAndPostId(comment.getUserIdOwnComment(), comment.getPostId());
+            Optional<Post> postsOptional = postsRepo.findByUserIdAndPostId(comment.getUserIdOwnPost(), comment.getPostId());
             if (!postsOptional.isPresent()) {
                 throw new MyValidateException("posts not found");
             }
             comment.setUserIdAddComment(userIdAddComment);
-            Object maxCommentID = commentRepo.findMaxCommentIdByUserIdOwnAndPostId(comment.getUserIdOwnComment(), comment.getPostId());
+            Object maxCommentID = commentRepo.findMaxCommentIdByUserIdOwnPostAndPostId(comment.getUserIdOwnPost(), comment.getPostId());
             if (maxCommentID != null) {
                 comment.setCommentId((long) maxCommentID + 1);
             } else {
@@ -60,9 +60,9 @@ public class CommentServiceImp implements CommentService {
     }
 
     @Override
-    public ResponseEntity<Object> getCommentsByPostIdAndUserIdOwn(long postId, long userIdOwn) throws MyValidateException {
+    public ResponseEntity<Object> getCommentsByPostIdAndUserIdOwnPost(long postId, long userIdOwnPost) throws MyValidateException {
         try {
-            List<Comment> listComment = commentRepo.findByPostIdAndUserIdOwnComment(postId, userIdOwn);
+            List<Comment> listComment = commentRepo.findByPostIdAndUserIdOwnPost(postId, userIdOwnPost);
             Collections.reverse(listComment);
             return ResponseEntity.ok(listComment);
         } catch (Exception e) {
@@ -73,10 +73,10 @@ public class CommentServiceImp implements CommentService {
     @Override
     public ResponseEntity<Object> deleteComment(HttpServletRequest request, Comment comment) throws MyValidateException {
         long userID = extractDataFromJwt.getUserId(request);
-        if (userID != comment.getUserIdOwnComment()) {
+        if (userID != comment.getUserIdOwnPost()) {
             return ResponseEntity.badRequest().build();
         }
-        Optional<Comment> commentOptional = commentRepo.findByCommentIdAndPostIdAndUserIdOwnComment(comment.getCommentId(), comment.getPostId(), comment.getUserIdOwnComment());
+        Optional<Comment> commentOptional = commentRepo.findByCommentIdAndPostIdAndUserIdOwnPost(comment.getCommentId(), comment.getPostId(), comment.getUserIdOwnPost());
         if (!commentOptional.isPresent()) {
             return ResponseEntity.badRequest().build();
         }

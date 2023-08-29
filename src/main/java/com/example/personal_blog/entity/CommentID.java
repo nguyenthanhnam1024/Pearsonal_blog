@@ -12,6 +12,6 @@ import java.io.Serializable;
 public class CommentId implements Serializable {
     private long commentId;
     private long userIdAddComment;
-    private long userIdOwnComment;
+    private long userIdOwnPost;
     private long postId;
 }

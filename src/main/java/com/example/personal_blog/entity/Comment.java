@@ -20,7 +20,7 @@ public class Comment {
     @Id
     private long userIdAddComment;
     @Id
-    private long userIdOwnComment;
+    private long userIdOwnPost;
     @Id
     private long postId;
     @NotBlank(message = "content must other blank")

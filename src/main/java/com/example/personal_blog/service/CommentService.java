@@ -9,6 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface CommentService {
     ResponseEntity<Object> createComment(HttpServletRequest request, Comment comment, BindingResult result) throws MyValidateException;
-    ResponseEntity<Object> getCommentsByPostIdAndUserIdOwn(long postId, long userIdOwn) throws MyValidateException;
+    ResponseEntity<Object> getCommentsByPostIdAndUserIdOwnPost(long postId, long userIdOwnPost) throws MyValidateException;
     ResponseEntity<Object> deleteComment(HttpServletRequest request, Comment comment) throws MyValidateException;
  }
