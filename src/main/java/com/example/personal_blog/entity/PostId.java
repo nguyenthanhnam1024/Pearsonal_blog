@@ -4,18 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import java.io.Serializable;
 
-@Entity
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-@IdClass(RoleUserId.class)
-public class RoleUser {
-    @Id
+public class PostId implements Serializable {
+    private long postId;
     private long userId;
-    @Id
-    private int roleId;
 }

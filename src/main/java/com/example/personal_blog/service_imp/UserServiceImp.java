@@ -62,7 +62,7 @@ public class UserServiceImp implements UserService {
                 if (!mapError.isEmpty()) {
                     return ResponseEntity.badRequest().body(mapError);
                 }
-                user.setUserID(oldUserOptional.get().getUserID());
+                user.setUserId(oldUserOptional.get().getUserId());
                 try {
                     userRepo.save(user);
                     return ResponseEntity.ok("user update success");
@@ -82,11 +82,11 @@ public class UserServiceImp implements UserService {
         if (userOptional.isPresent()) {
             Optional<Role> roleOptional = roleRepo.findByRoleName(responseLogin.getRoleName());
             if (roleOptional.isPresent()) {
-                Optional<RoleUser> roleUserOptional = roleUserRepo.findByUserID(userOptional.get().getUserID());
+                Optional<RoleUser> roleUserOptional = roleUserRepo.findByUserId(userOptional.get().getUserId());
                 if (roleUserOptional.isPresent()) {
-                    if (roleUserOptional.get().getRoleID() != roleOptional.get().getRoleID()) {
+                    if (roleUserOptional.get().getRoleId() != roleOptional.get().getRoleId()) {
                         roleUserRepo.delete(roleUserOptional.get());
-                        roleUserRepo.save(new RoleUser(userOptional.get().getUserID(), roleOptional.get().getRoleID()));
+                        roleUserRepo.save(new RoleUser(userOptional.get().getUserId(), roleOptional.get().getRoleId()));
                     }
                     return ResponseEntity.ok("user update success");
                 }

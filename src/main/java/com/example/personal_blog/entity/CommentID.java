@@ -9,7 +9,9 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class RoleUserId implements Serializable {
-    private int roleId;
-    private long userId;
+public class CommentId implements Serializable {
+    private long commentId;
+    private long userIdAddComment;
+    private long userIdOwnPost;
+    private long postId;
 }

@@ -34,13 +34,13 @@ public class UserDetailsServiceImp implements UserDetailsService {
         User user = userRepo.findById(account.getUserID())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found for account: " + account.getUserName()));
 
-        RoleUser roleUser = roleUserRepo.findByUserID(user.getUserID())
+        RoleUser roleUser = roleUserRepo.findByUserId(user.getUserId())
                 .orElseThrow(() -> new UsernameNotFoundException("Role not found for user: " + user.getName()));
 
-        Role role = roleRepo.findById(roleUser.getRoleID())
+        Role role = roleRepo.findById(roleUser.getRoleId())
                 .orElseThrow(() -> new UsernameNotFoundException("Role not found for user: " + user.getName()));
 
-        if (role.getRoleName().equals("ADMIN") && user.getUserID() != 1) {
+        if (role.getRoleName().equals("ADMIN") && user.getUserId() != 1) {
             throw new UsernameNotFoundException("authenticate error");
         }
         return userDetailsImp.build(account.getUserName(), account.getPassword(), user, role.getRoleName());
