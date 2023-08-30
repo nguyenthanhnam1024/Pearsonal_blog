@@ -15,5 +15,5 @@ public interface CommentRepo extends JpaRepository<Comment, CommentId> {
     @Query("select max(c.commentId) from Comment  c where c.userIdOwnPost = :userIdOwnPost and c.postId = :postId")
     Object findMaxCommentIdByUserIdOwnPostAndPostId(@Param("userIdOwnPost") long userIdOwnPost, @Param("postId") long postId);
     List<Comment> findByPostIdAndUserIdOwnPost(long postId, long userIdOwnPost);
-    Optional<Comment> findByCommentIdAndPostIdAndUserIdOwnPost(long commentId, long postId, long userIdOwnPost);
+    Optional<Comment> findByCommentIdAndPostIdAndUserIdAddComment(long commentId, long postId, long userIdAddComment);
 }

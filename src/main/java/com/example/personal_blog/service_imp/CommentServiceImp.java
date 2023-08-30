@@ -73,10 +73,10 @@ public class CommentServiceImp implements CommentService {
     @Override
     public ResponseEntity<Object> deleteComment(HttpServletRequest request, Comment comment) throws MyValidateException {
         long userID = extractDataFromJwt.getUserId(request);
-        if (userID != comment.getUserIdOwnPost()) {
+        if (userID != comment.getUserIdAddComment()) {
             return ResponseEntity.badRequest().build();
         }
-        Optional<Comment> commentOptional = commentRepo.findByCommentIdAndPostIdAndUserIdOwnPost(comment.getCommentId(), comment.getPostId(), comment.getUserIdOwnPost());
+        Optional<Comment> commentOptional = commentRepo.findByCommentIdAndPostIdAndUserIdAddComment(comment.getCommentId(), comment.getPostId(), comment.getUserIdAddComment());
         if (!commentOptional.isPresent()) {
             return ResponseEntity.badRequest().build();
         }
