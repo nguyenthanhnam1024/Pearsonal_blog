@@ -26,13 +26,15 @@ public class EmailTemplateServiceImp implements EmailTemplateService {
     }
 
     @Override
-    public EmailTemplate addEmailTemplate(HttpServletRequest request, EmailTemplate emailTemplate, BindingResult result) throws MyValidateException {
+    public void addEmailTemplate(HttpServletRequest request, EmailTemplate emailTemplate, BindingResult result) throws MyValidateException {
         this.validateEmailRequestedAndValidateRole(request, emailTemplate, result);
-        Optional<EmailTemplate> emailTemplateOptional = emailTemplateRepo.findByTitleAndContent(emailTemplate.getTitle(), emailTemplate.getContent());
+        Optional<EmailTemplate> emailTemplateOptional =
+                emailTemplateRepo.findByTitleAndContentAndSendTimeAndSendRecurringAndSent
+                        (emailTemplate.getTitle(), emailTemplate.getContent(), emailTemplate.getSendTime(), emailTemplate.isSendRecurring(), emailTemplate.isSent());
         if (emailTemplateOptional.isPresent()) {
             throw new MyValidateException("email have content similar already exist");
         }
-        return emailTemplateRepo.save(emailTemplate);
+        emailTemplateRepo.save(emailTemplate);
     }
 
     @Override

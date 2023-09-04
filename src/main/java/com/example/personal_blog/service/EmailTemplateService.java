@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface EmailTemplateService {
     void validateEmailRequestedAndValidateRole(HttpServletRequest request, EmailTemplate emailTemplate, BindingResult result) throws MyValidateException;
-    EmailTemplate addEmailTemplate(HttpServletRequest request, EmailTemplate emailTemplate, BindingResult result) throws MyValidateException;
+    void addEmailTemplate(HttpServletRequest request, EmailTemplate emailTemplate, BindingResult result) throws MyValidateException;
     void updateEmailTemplate(HttpServletRequest request, EmailTemplate emailTemplate, BindingResult result) throws MyValidateException;
     void deleteEmailTemplate(HttpServletRequest request, EmailTemplate emailTemplate) throws MyValidateException;
 }

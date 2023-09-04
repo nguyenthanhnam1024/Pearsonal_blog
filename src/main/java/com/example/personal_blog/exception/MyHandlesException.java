@@ -16,4 +16,9 @@ public class MyHandlesException {
     public ResponseEntity<?> handleUsernameNotFoundException(UsernameNotFoundException ex) {
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
+
+    @ExceptionHandler(MyBadRequestEx.class)
+    public ResponseEntity<?> handleBadRequestEx(MyBadRequestEx ex) {
+        return ResponseEntity.status(400).body(ex.getMessage());
+    }
 }

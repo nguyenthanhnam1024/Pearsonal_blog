@@ -4,10 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
@@ -15,18 +12,16 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @RequiredArgsConstructor
-public class EmailTemplate {
+public class EmailPattern {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int emailTemplateId;
+    private int emailPatternId;
 
-    @NotBlank(message = "title must other blank")
+    @NotBlank(message = "Title must not be blank")
     private String title;
-
-    @NotBlank(message = "Content must other blank")
-    private String content;
 
     private Date sendTime;
     private boolean sent;
     private boolean sendRecurring;
 }
+
