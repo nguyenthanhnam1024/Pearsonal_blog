@@ -23,9 +23,6 @@ public class EmailTemplate {
     @NotBlank(message = "title must other blank")
     private String title;
 
-    @NotBlank(message = "Content must other blank")
-    private String content;
-
     private Date sendTime;
     private boolean sent;
     private boolean sendRecurring;
