@@ -47,7 +47,7 @@ public class PersonalBlogApplication {
 	public void initialize() {
 		BCryptPasswordEncoder bc = new BCryptPasswordEncoder();
 		String encodedPassword = bc.encode("admin");
-		User user = new User(1L, null, "admin",20, "user@gmail.com", "0123456789", "vietnam");
+		User user = new User(1L, null, "admin",20, "ayevooi230222@gmail.com", "0123456789", "vietnam");
 		userRepo.save(user);
 		Account account = new Account(1L, "admin", encodedPassword, user.getUserId());
 		accountRepo.save(account);
