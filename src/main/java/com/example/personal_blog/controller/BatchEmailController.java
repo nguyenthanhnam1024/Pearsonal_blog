@@ -4,8 +4,8 @@ import com.example.personal_blog.entity.EmailTemplate;
 import com.example.personal_blog.exception.MyBadRequestEx;
 import com.example.personal_blog.exception.MyValidateException;
 import com.example.personal_blog.request.RequestEmailTemplate;
+import com.example.personal_blog.schedule.ScheduleEmails;
 import com.example.personal_blog.service.EmailTemplateService;
-import com.example.personal_blog.service.ScheduledEmailService;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -18,13 +18,13 @@ import java.util.List;
 @RequestMapping("/batchEmail")
 @AllArgsConstructor
 public class BatchEmailController {
-    private final ScheduledEmailService scheduledEmailService;
     private final EmailTemplateService emailTemplateService;
+    private final ScheduleEmails scheduleEmails;
 
     @PostMapping("/instantSending")
     public String instantSending(HttpServletRequest request, @RequestBody @Valid RequestEmailTemplate requestEmailTemplate, BindingResult result) throws MyValidateException, MyBadRequestEx {
         EmailTemplate emailTemplate = emailTemplateService.addEmailTemplate(request, requestEmailTemplate, result);
-        scheduledEmailService.instantSendEmail(emailTemplate);
+        scheduleEmails.instantSendEmail(emailTemplate);
         return "instant send email success";
     }
 

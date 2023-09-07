@@ -1,4 +1,4 @@
-package com.example.personal_blog.service_imp;
+package com.example.personal_blog.schedule;
 
 import com.example.personal_blog.entity.EmailTemplate;
 import com.example.personal_blog.entity.EmailTemplateContent;
@@ -6,37 +6,30 @@ import com.example.personal_blog.exception.MyBadRequestEx;
 import com.example.personal_blog.repository.EmailTemplateContentRepo;
 import com.example.personal_blog.repository.EmailTemplateRepo;
 import com.example.personal_blog.repository.UserRepo;
-import com.example.personal_blog.service.ScheduledEmailService;
 import lombok.AllArgsConstructor;
-import org.apache.commons.io.IOUtils;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Date;
 import java.util.List;
 
-@Service
+
+@Component
 @AllArgsConstructor
 @EnableScheduling
-public class ScheduledEmailServiceImp implements ScheduledEmailService {
+public class ScheduleEmails {
     private final JavaMailSender javaMailSender;
     private final UserRepo userRepo;
     private final EmailTemplateRepo emailTemplateRepo;
     private final EmailTemplateContentRepo emailTemplateContentRepo;
 
-    @Override
-    public void addAttachmentLocalToBody(MimeMessageHelper helper, String path) throws MessagingException {
+    private void addAttachmentLocalToBody(MimeMessageHelper helper, String path) throws MessagingException {
         FileSystemResource file = new FileSystemResource(path);
         String fileName = file.getFilename();
         if (fileName != null) {
@@ -46,32 +39,13 @@ public class ScheduledEmailServiceImp implements ScheduledEmailService {
         }
     }
 
-    @Override
-    public void addAttachmentUrlToBody(MimeMessageHelper helper, String url) throws IOException, MessagingException {
-        URL file = new URL(url);
-        URLConnection connection = file.openConnection();
-        InputStream inputStream = connection.getInputStream();
-        ByteArrayResource resource = new ByteArrayResource(IOUtils.toByteArray(inputStream));
-        String fileName = resource.getFilename();
-        if (fileName != null) {
-            helper.addAttachment(fileName, resource);
-        } else {
-            helper.addAttachment("url file", resource);
-        }
-    }
-
-    @Override
-    public void setBodyForEmail(MimeMessageHelper helper, int emailTemplateId) throws MyBadRequestEx {
+    private void setBodyForEmail(MimeMessageHelper helper, int emailTemplateId) throws MyBadRequestEx {
         try {
             for (EmailTemplateContent e : emailTemplateContentRepo.findByEmailId(emailTemplateId)) {
                 if (e.getCategory().equals("text")) {
                     helper.setText(e.getValue());
-                }
-                else if (e.getCategory().equals("path")) {
+                } else {
                     this.addAttachmentLocalToBody(helper, e.getValue());
-                }
-                else {
-                    this.addAttachmentUrlToBody(helper, e.getValue());
                 }
             }
         } catch (Exception e) {
@@ -79,9 +53,9 @@ public class ScheduledEmailServiceImp implements ScheduledEmailService {
         }
     }
 
-    @Override
-    @Scheduled(fixedRate = 10000*12)
-    public void sendScheduledEmail() throws MyBadRequestEx {
+    @Scheduled(fixedRate = 3600000*24*7)
+
+    private void sendScheduledEmail() throws MyBadRequestEx {
         List<EmailTemplate> emailTemplates = emailTemplateRepo.findBySenRecurringValue();
         try {
             if (!emailTemplates.isEmpty()) {
@@ -108,7 +82,6 @@ public class ScheduledEmailServiceImp implements ScheduledEmailService {
         }
     }
 
-    @Override
     public void instantSendEmail(EmailTemplate template) throws MyBadRequestEx {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -128,9 +101,8 @@ public class ScheduledEmailServiceImp implements ScheduledEmailService {
         }
     }
 
-    @Override
     @Scheduled(fixedRate = 10000*6)
-    public void scheduleAOneTimeEmail() throws MyBadRequestEx {
+    private void scheduleAOneTimeEmail() throws MyBadRequestEx {
         List<EmailTemplate> emailTemplates = emailTemplateRepo.findEmailsSendOnce();
         try {
             if (!emailTemplates.isEmpty()) {
@@ -159,5 +131,4 @@ public class ScheduledEmailServiceImp implements ScheduledEmailService {
             throw new MyBadRequestEx(e.getMessage());
         }
     }
-
 }
